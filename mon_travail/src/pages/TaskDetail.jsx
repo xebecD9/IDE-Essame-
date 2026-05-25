@@ -2,9 +2,15 @@ import { useParams, Link } from "react-router-dom";
 
 function TaskDetail() {
     const { id } = useParams();
-    const saved = localStorage.getItem("tasks");
-    const taskList = saved ? JSON.parse(saved) : [];
-    const task = taskList.find((t) => t.id === parseInt(id));
+    let taskList = [];
+    try {
+        const saved = localStorage.getItem("tasks");
+        if (saved) taskList = JSON.parse(saved);
+    } catch (e) {
+        console.error("Erreur de lecture des tâches", e);
+    }
+    
+    const task = taskList.find((t) => t.id === parseInt(id, 10));
 
     if (!task) {
         return (
@@ -40,9 +46,15 @@ function TaskDetail() {
             statusText = "#333";
     }
     
-    const dateCreation = task.id > 1000000000
-        ? new Date(task.id).toLocaleString("fr-FR") 
-        : `tache initiale #${task.id}`;
+    let dateCreation;
+    if (task.createdAt) {
+        dateCreation = new Date(task.createdAt).toLocaleString("fr-FR");
+    } else if (task.id > 1000000000) {
+        // Fallback for tasks created before this fix
+        dateCreation = new Date(task.id).toLocaleString("fr-FR");
+    } else {
+        dateCreation = `tâche initiale #${task.id}`;
+    }
         
     return (
         <main style={{

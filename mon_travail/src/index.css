@@ -67,6 +67,23 @@ body {
   box-shadow: 0 6px 14px rgba(91, 122, 83, 0.3);
 }
 
+.btn-danger {
+  background-color: #a05a5a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #8c4b4b;
+  transform: translateY(-2px);
+}
+
 .input, .select, .textarea {
   padding: 0.8rem 1rem;
   border-radius: 12px;

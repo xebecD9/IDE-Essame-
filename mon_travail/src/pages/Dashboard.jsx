@@ -28,7 +28,16 @@ function Dashboard() {
   const [tasks, setTasks] = useLocalStorage('tasks', INITIAL_TASKS);
 
   const handleAddTask = (newTask) => {
-    setTasks((prev) => [...prev, { ...newTask, id: Date.now() }]);
+    setTasks((prev) => {
+      const nextId = prev.length > 0 ? prev.reduce((max, t) => Math.max(max, t.id), 0) + 1 : 1;
+      return [...prev, { ...newTask, id: nextId, createdAt: Date.now() }];
+    });
+  };
+
+  const handleDeleteTask = (id) => {
+    if (window.confirm("Voulez-vous vraiment supprimer cette tâche ?")) {
+      setTasks((prev) => prev.filter(t => t.id !== id));
+    }
   };
 
   return (
@@ -44,7 +53,7 @@ function Dashboard() {
         margin: '2rem 0' 
       }}>
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} />
+          <TaskCard key={task.id} task={task} onDelete={handleDeleteTask} />
         ))}
       </div>
       

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function TaskCard({ task }) {
+function TaskCard({ task, onDelete }) {
     let statusBg, statusText;
     switch (task.statut) {
         case "A faire":
@@ -20,13 +20,28 @@ function TaskCard({ task }) {
             statusText = "#333";
     }
 
+    const handleDeleteClick = (e) => {
+        e.preventDefault();
+        if (onDelete) {
+            onDelete(task.id);
+        }
+    };
+
     return (
         <Link to={`/task/${task.id}`} style={{ textDecoration: "none", display: "block", height: "100%" }}>
             <article className="card" style={{ height: "100%" }}>
-                <div>
-                    <span className="status-badge" style={{ backgroundColor: statusBg, color: statusText }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                    <span className="status-badge" style={{ backgroundColor: statusBg, color: statusText, marginBottom: "0" }}>
                         {task.statut}
                     </span>
+                    <button 
+                        className="btn-danger" 
+                        onClick={handleDeleteClick}
+                        title="Supprimer la tâche"
+                        style={{ padding: "0.2rem 0.5rem", borderRadius: "6px" }}
+                    >
+                        X
+                    </button>
                 </div>
                 
                 <h3 style={{ color: "var(--accent-wood)", margin: "0 0 0.5rem", fontSize: "1.2rem" }}>
