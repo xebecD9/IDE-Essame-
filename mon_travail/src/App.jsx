@@ -1,25 +1,18 @@
-
-import ArticleCard from "./components/ArticleCard";
-
-
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import Navbar from './layouts/Navbar';
+import TaskDetail from './pages/TaskDetail';
 function App() {
-return <div>
-  <h1> Bienvenue sur monBlog React </h1>
-  <ArticleCard 
-    title="Introduction a React"
-    author="Mamadou Ba"
-    content="React est une bibliothèque JavaScript pour construire des interfaces utilisateur. Il a été développé par Facebook et est devenu l'un des outils les plus utilisés dans le développement web moderne."
-  />
-  <ArticleCard
-    title ="Git en 5 minutes"
-    author = "Archange"
-    content="Git est un outil de versioning indispensable"
-  />
-  <ArticleCard
-    title="pourquoi Node.js"
-    author = "Ambani"
-    content="Node.js permet d'ecrire du JavaScript cote serveur ."
-  />
-</div>;
+return (
+    <BrowserRouter>
+      <div>
+        <Navbar />
+        <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/task/:id" element={<TaskDetail />} />
+        </Routes>
+      </div>  
+    </BrowserRouter>
+)
 }
 export default App;
