@@ -50,7 +50,7 @@ function TaskDetail() {
     if (task.createdAt) {
         dateCreation = new Date(task.createdAt).toLocaleString("fr-FR");
     } else if (task.id > 1000000000) {
-        // Fallback for tasks created before this fix
+        
         dateCreation = new Date(task.id).toLocaleString("fr-FR");
     } else {
         dateCreation = `tâche initiale #${task.id}`;

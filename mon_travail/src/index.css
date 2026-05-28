@@ -1,21 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
 :root {
-  --bg-color: #faf7f2;
-  --text-primary: #3b2f2f;
-  --text-secondary: #705f5f;
-  --card-bg: #ffffff;
-  --card-border: #e8dfd1;
-  --accent-green: #5b7a53;
-  --accent-green-hover: #486142;
-  --accent-wood: #8b6b50;
+  --bg-color: #F4ECD8;
+  --text-primary: #3E2723;
+  --text-secondary: #5D4037;
+  --card-bg: #FFF8E7;
+  --card-border: #D7CCC8;
+  --accent-green: #2E7D32;
+  --accent-green-hover: #1B5E20;
+  --accent-wood: #8B5A2B;
   
-  --status-todo-bg: #faeacc;
-  --status-todo-text: #966117;
-  --status-prog-bg: #dceada;
-  --status-prog-text: #3c5e31;
-  --status-done-bg: #d4e8dd;
-  --status-done-text: #2c6144;
+  --status-todo-bg: #EAE0CC;
+  --status-todo-text: #8B5A2B;
+  --status-prog-bg: #FFF8E7;
+  --status-prog-text: #2E7D32;
+  --status-done-bg: #2E7D32;
+  --status-done-text: #FFFFFF;
 }
 
 * {

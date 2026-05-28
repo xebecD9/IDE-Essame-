@@ -16,7 +16,7 @@ function TaskCard({ task, onDelete }) {
             statusText = "var(--status-done-text)";
             break;
         default:
-            statusBg = "#eee";
+            statusBg = "#c71919";
             statusText = "#333";
     }
 

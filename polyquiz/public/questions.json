@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "categorie": "Formule 1",
+    "libelle": "Combien de championnats du monde Lewis Hamilton a-t-il remportés ?",
+    "options": ["5", "6", "7", "8"],
+    "bonne_reponse": "7"
+  },
+  {
+    "id": 2,
+    "categorie": "Formule 1",
+    "libelle": "Quelle écurie Max Verstappen représente-t-il depuis 2016 ?",
+    "options": ["Mercedes", "Ferrari", "Red Bull Racing", "McLaren"],
+    "bonne_reponse": "Red Bull Racing"
+  },
+  {
+    "id": 3,
+    "categorie": "Moto GP",
+    "libelle": "Quel pilote est surnommé 'The Doctor' ?",
+    "options": ["Marc Marquez", "Valentino Rossi", "Jorge Lorenzo", "Casey Stoner"],
+    "bonne_reponse": "Valentino Rossi"
+  },
+  {
+    "id": 4,
+    "categorie": "Moto GP",
+    "libelle": "Combien de titres MotoGP Marc Márquez a-t-il remportés ?",
+    "options": ["4", "6", "8", "10"],
+    "bonne_reponse": "8"
+  },
+  {
+    "id": 5,
+    "categorie": "NBA",
+    "libelle": "Quel joueur NBA détient le record de points en carrière ?",
+    "options": ["Kareem Abdul-Jabbar", "LeBron James", "Michael Jordan", "Kobe Bryant"],
+    "bonne_reponse": "LeBron James"
+  },
+  {
+    "id": 6,
+    "categorie": "NBA",
+    "libelle": "Combien de rings NBA Stephen Curry possède-t-il ?",
+    "options": ["2", "3", "4", "5"],
+    "bonne_reponse": "4"
+  },
+  {
+    "id": 7,
+    "categorie": "Manga/Anime",
+    "libelle": "Qui est l'auteur de 'One Piece' ?",
+    "options": ["Masashi Kishimoto", "Akira Toriyama", "Eiichiro Oda", "Hajime Isayama"],
+    "bonne_reponse": "Eiichiro Oda"
+  },
+  {
+    "id": 8,
+    "categorie": "Manga/Anime",
+    "libelle": "Dans 'Naruto', quel est le nom du neuf-queues scellé en Naruto ?",
+    "options": ["Gyuki", "Kurama", "Shukaku", "Chomei"],
+    "bonne_reponse": "Kurama"
+  },
+  {
+    "id": 9,
+    "categorie": "Formule 1",
+    "libelle": "Sur quel circuit se déroule le Grand Prix de Monaco ?",
+    "options": ["Circuit de la Sarthe", "Circuit de Monte-Carlo", "Circuit Gilles-Villeneuve", "Circuit de Spa"],
+    "bonne_reponse": "Circuit de Monte-Carlo"
+  },
+  {
+    "id": 10,
+    "categorie": "Manga/Anime",
+    "libelle": "Quel est le pouvoir du personnage principal de 'My Hero Academia' ?",
+    "options": ["Gestion", "Full Cowl", "One For All", "Explosion"],
+    "bonne_reponse": "One For All"
+  }
+]

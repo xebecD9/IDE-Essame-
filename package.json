@@ -1,0 +1,10 @@
+{
+  "name": "front-end-projects",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "concurrently \"npm run dev --prefix launcher\" \"npm run dev --prefix mon_travail\" \"npm run dev --prefix polyquiz\""
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
