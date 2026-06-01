@@ -1,20 +1,36 @@
 import { createContext, useContext, useState } from 'react'
 
-// 1. Instanciation du contexte (valeur par défaut = null)
 const UserContext = createContext(null)
 
-// 2. Le Provider : composant qui enveloppe l'app et fournit les données
 function UserProvider({ children }) {
-  // L'état global : pseudo null = pas encore connecté
-  const [pseudo, setPseudo]         = useState(null)
+  const [pseudo, setPseudo] = useState(null)
   const [meilleureScore, setMeilleureScore] = useState(0)
 
-  // On expose les données ET les fonctions pour les modifier
+  const [historique, setHistorique] = useState(() => {
+    try {
+      const saved = localStorage.getItem('polyquiz_historique')
+      return saved ? JSON.parse(saved) : []
+    } catch {
+      return []
+    }
+  })
+
+  const ajouterJoueur = (nom, score) => {
+    const nouvelHistorique = [
+      ...historique,
+      { pseudo: nom, score, date: new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) }
+    ]
+    setHistorique(nouvelHistorique)
+    localStorage.setItem('polyquiz_historique', JSON.stringify(nouvelHistorique))
+  }
+
   const value = {
     pseudo,
     setPseudo,
     meilleureScore,
     setMeilleureScore,
+    historique,
+    ajouterJoueur,
   }
 
   return (
@@ -24,8 +40,6 @@ function UserProvider({ children }) {
   )
 }
 
-// 3. Hook custom pour consommer le contexte proprement
-// Évite d'importer useContext + UserContext dans chaque composant
 function useUser() {
   const context = useContext(UserContext)
   if (!context) {

@@ -12,7 +12,6 @@ function App() {
         <Route path="/" element={<Accueil />} />
         <Route path="/quiz" element={<ProtectedRoute><QuizEngine /></ProtectedRoute>} />
         <Route path="/resultats" element={<ProtectedRoute><Resultats /></ProtectedRoute>} />
-        {/* Route Catch-all pour 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

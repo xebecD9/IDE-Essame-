@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef } from 'react'
+import { useReducer, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useUser } from '../contexts/UserContext'
 import useFetch from '../hooks/useFetch'
@@ -8,12 +8,9 @@ function QuizEngine() {
   const { data: questions, loading, error } = useFetch('/questions.json')
   const [state, dispatch] = useReducer(quizReducer, initialState)
   const intervalRef = useRef(null)
-  const [tempsRestant, setTempsRestant] = useReducer(
-    (t, action) => action === 'reset' ? 60 : t - 1,
-    60
-  )
+  const [tempsRestant, setTempsRestant] = useState(60)
 
-  const { pseudo, setMeilleureScore, meilleureScore } = useUser()
+  const { pseudo, setMeilleureScore, meilleureScore, ajouterJoueur } = useUser()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -26,7 +23,7 @@ function QuizEngine() {
     if (state.statut !== 'en_cours') return
 
     intervalRef.current = setInterval(() => {
-      setTempsRestant('tick')
+      setTempsRestant(prev => prev - 1)
     }, 1000)
 
     return () => clearInterval(intervalRef.current)
@@ -45,6 +42,7 @@ function QuizEngine() {
       if (state.score > meilleureScore) {
         setMeilleureScore(state.score)
       }
+      ajouterJoueur(pseudo, state.score)
       navigate('/resultats', { state: { score: state.score, total: questions?.length } })
     }
   }, [state.statut])
@@ -68,7 +66,6 @@ function QuizEngine() {
 
   const questionActuelle = questions[state.questionIndex]
 
-  // Sécurité additionnelle au cas où
   if (!questionActuelle) return null
 
   return (

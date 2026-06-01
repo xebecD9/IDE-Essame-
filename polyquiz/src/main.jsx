@@ -6,7 +6,6 @@ import './index.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    {/* UserProvider enveloppe tout : pseudo et score accessibles partout */}
     <UserProvider>
       <App />
     </UserProvider>

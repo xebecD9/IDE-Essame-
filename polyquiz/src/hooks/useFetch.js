@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react'
 
 function useFetch(url) {
-  // Les 3 états internes du hook
   const [data, setData]       = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError]     = useState(null)
-
+//le useEffect sert
   useEffect(() => {
-    // Permet d'annuler la requête si le composant est démonté avant la fin
     let isCancelled = false
 
     setLoading(true)
@@ -31,11 +29,9 @@ function useFetch(url) {
         }
       })
 
-    // Cleanup : évite les mises à jour d'état sur un composant démonté
     return () => { isCancelled = true }
-  }, [url]) // Se re-déclenche si l'URL change
+  }, [url])
 
-  // Retourne un objet : le composant destructure ce dont il a besoin
   return { data, loading, error }
 }
 
