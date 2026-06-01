@@ -18,5 +18,5 @@ const taskRoutes = require('./routes/taskRoutes');
 app.use('/api/tasks', taskRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Serveur lancé et à l'écoute sur http://localhost:${PORT}`);
+  console.log(` Serveur lancé et à l'écoute sur http://localhost:${PORT}`);
 });
