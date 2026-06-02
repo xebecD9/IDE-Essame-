@@ -29,11 +29,8 @@ cd polyquiz_api
 # Installer les dépendances
 npm install
 
-# Créer un fichier .env avec:
-PORT=5001
-MONGO_URI=mongodb+srv://user:password@cluster.mongodb.net/polyquiz?ssl=true...
-JWT_SECRET=votre_secret_jwt
-FRONTEND_URL=http://localhost:5175
+# Créer un fichier .env 
+
 
 # Charger les questions de départ (25 questions)
 npm run seed

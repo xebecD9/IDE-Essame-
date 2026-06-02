@@ -8,7 +8,7 @@ function QuizEngine() {
   const { data: questions, loading, error } = useFetch('/api/questions')
   const [state, dispatch] = useReducer(quizReducer, initialState)
   const intervalRef = useRef(null)
-  const [tempsRestant, setTempsRestant] = useState(60)
+  const [tempsRestant, setTempsRestant] = useState(120)
 
   const { pseudo, setMeilleureScore, meilleureScore, ajouterJoueur } = useUser()
   const navigate = useNavigate()
