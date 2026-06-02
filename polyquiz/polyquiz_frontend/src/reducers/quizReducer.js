@@ -3,6 +3,8 @@ export const initialState = {
   score: 0,
   reponsesSelectionnees: [],
   statut: 'en_attente',
+  feedback: null,
+  reponseSelectionnee: null
 }
 
 export function quizReducer(state, action) {
@@ -15,10 +17,23 @@ export function quizReducer(state, action) {
       }
 
     case 'ANSWER_QUESTION': {
-      //verifier si la reponse est bonne 
       const { reponse, bonneReponse, nombreQuestions } = action.payload
-
       const estCorrecte = reponse === bonneReponse
+      
+      return {
+        ...state,
+        feedback: {
+          estCorrecte,
+          reponse,
+          bonneReponse
+        },
+        reponseSelectionnee: reponse
+      }
+    }
+
+    case 'NEXT_QUESTION': {
+      const { nombreQuestions } = action.payload
+      const estCorrecte = state.feedback.estCorrecte
       const nouveauScore = estCorrecte ? state.score + 1 : state.score
       const prochainIndex = state.questionIndex + 1
       const estDerniereQuestion = prochainIndex >= nombreQuestions
@@ -26,8 +41,10 @@ export function quizReducer(state, action) {
       return {
         ...state,
         score: nouveauScore,
-        reponsesSelectionnees: [...state.reponsesSelectionnees, reponse],
+        reponsesSelectionnees: [...state.reponsesSelectionnees, state.reponseSelectionnee],
         questionIndex: prochainIndex,
+        feedback: null,
+        reponseSelectionnee: null,
         statut: estDerniereQuestion ? 'termine' : 'en_cours',
       }
     }

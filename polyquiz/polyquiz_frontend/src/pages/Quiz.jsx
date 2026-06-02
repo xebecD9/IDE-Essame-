@@ -6,7 +6,7 @@ import { quizReducer, initialState } from '../reducers/quizReducer'
 
 function Quiz() {
   // JALON 1 : useFetch récupère les questions
-  const { data: questions, loading, error } = useFetch('/questions.json')
+  const { data: questions, loading, error } = useFetch('/api/questions')
 
   // JALON 4 : useReducer gère tout l'état complexe du quiz
   const [state, dispatch] = useReducer(quizReducer, initialState)
@@ -68,7 +68,7 @@ function Quiz() {
       type: 'ANSWER_QUESTION',
       payload: {
         reponse,
-        bonneReponse: questionActuelle.bonne_reponse,
+        bonneReponse: questionActuelle.correctAnswer,
         nombreQuestions: questions.length,
       }
     })
@@ -92,9 +92,9 @@ function Quiz() {
 
       <div style={{ background: '#16161e', borderRadius: '12px', padding: '2rem', marginBottom: '1.5rem' }}>
         <span style={{ color: '#7c6af7', fontSize: '0.8rem', fontWeight: 700 }}>
-          {questionActuelle.categorie}
+          {questionActuelle.category}
         </span>
-        <h2 style={{ marginTop: '0.5rem' }}>{questionActuelle.libelle}</h2>
+        <h2 style={{ marginTop: '0.5rem' }}>{questionActuelle.text}</h2>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>

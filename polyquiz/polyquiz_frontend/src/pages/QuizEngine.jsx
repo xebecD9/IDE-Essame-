@@ -1,0 +1,182 @@
+import { useReducer, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUser } from '../contexts/UserContext'
+import useFetch from '../hooks/useFetch'
+import { quizReducer, initialState } from '../reducers/quizReducer'
+
+function QuizEngine() {
+  const { data: questions, loading, error } = useFetch('/api/questions')
+  const [state, dispatch] = useReducer(quizReducer, initialState)
+  const intervalRef = useRef(null)
+  const [tempsRestant, setTempsRestant] = useState(60)
+
+  const { pseudo, setMeilleureScore, meilleureScore, ajouterJoueur } = useUser()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (questions && state.statut === 'en_attente') {
+      dispatch({ type: 'START_QUIZ' })
+    }
+  }, [questions])
+
+  useEffect(() => {
+    if (state.statut !== 'en_cours') return
+
+    intervalRef.current = setInterval(() => {
+      setTempsRestant(prev => prev - 1)
+    }, 1000)
+
+    return () => clearInterval(intervalRef.current)
+  }, [state.statut])
+
+  useEffect(() => {
+    if (tempsRestant <= 0) {
+      clearInterval(intervalRef.current)
+      dispatch({ type: 'FINISH_QUIZ' })
+    }
+  }, [tempsRestant])
+
+  useEffect(() => {
+    if (state.statut === 'termine') {
+      clearInterval(intervalRef.current)
+      if (state.score > meilleureScore) {
+        setMeilleureScore(state.score)
+      }
+      ajouterJoueur(pseudo, state.score)
+      navigate('/resultats', { state: { score: state.score, total: questions?.length } })
+    }
+  }, [state.statut])
+
+  const handleReponse = (reponse) => {
+    if (!questions) return
+    const questionActuelle = questions[state.questionIndex]
+    dispatch({
+      type: 'ANSWER_QUESTION',
+      payload: {
+        reponse,
+        bonneReponse: questionActuelle.correctAnswer,
+        nombreQuestions: questions.length,
+      }
+    })
+  }
+
+  const handleNextQuestion = () => {
+    if (!questions) return
+    dispatch({
+      type: 'NEXT_QUESTION',
+      payload: {
+        nombreQuestions: questions.length,
+      }
+    })
+  }
+
+  if (loading) return <div style={{ color: '#3E2723', textAlign: 'center', padding: '4rem' }}>Chargement des questions...</div>
+  if (error)   return <div style={{ color: '#D32F2F', textAlign: 'center', padding: '4rem' }}>Erreur : {error}</div>
+  if (!questions || state.statut === 'en_attente' || state.statut === 'termine') return null
+
+  const questionActuelle = questions[state.questionIndex]
+
+  if (!questionActuelle) return null
+
+  return (
+    <main style={{ maxWidth: '700px', margin: '0 auto', padding: '2rem', color: '#3E2723', minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', padding: '1rem', background: '#FFF8E7', borderRadius: '12px', border: '1px solid #D7CCC8' }}>
+        <span>Joueur : <strong style={{ color: '#8B5A2B' }}>{pseudo}</strong></span>
+        <span style={{ color: tempsRestant <= 10 ? '#D32F2F' : '#2E7D32', fontWeight: 'bold' }}>
+          ⏱ {tempsRestant}s
+        </span>
+        <span style={{ color: '#5D4037' }}>Question {state.questionIndex + 1}/{questions.length}</span>
+        <button
+          onClick={() => {
+            if (window.confirm("Voulez-vous vraiment quitter l'aventure en cours ?")) {
+               navigate('/')
+            }
+          }}
+          style={{ padding: '0.4rem 0.8rem', background: '#D32F2F', color: '#fff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.85rem' }}
+        >
+          Quitter
+        </button>
+      </div>
+
+      <div style={{ background: '#EAE0CC', borderRadius: '12px', padding: '2rem', marginBottom: '1.5rem', border: '2px solid #8B5A2B', boxShadow: '0 4px 10px rgba(139, 90, 43, 0.1)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+          <span style={{ color: '#8B5A2B', fontSize: '0.9rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>
+            {questionActuelle.category}
+          </span>
+          <span style={{
+            padding: '0.4rem 0.8rem',
+            borderRadius: '6px',
+            fontSize: '0.8rem',
+            fontWeight: 'bold',
+            color: '#fff',
+            background: questionActuelle.difficulty === 'facile' ? '#4CAF50' : questionActuelle.difficulty === 'moyen' ? '#FF9800' : '#F44336'
+          }}>
+            {questionActuelle.difficulty === 'facile' ? '⭐ Facile' : questionActuelle.difficulty === 'moyen' ? '⭐⭐ Moyen' : '⭐⭐⭐ Difficile'}
+          </span>
+        </div>
+        <h2 style={{ marginTop: '0.5rem', fontFamily: 'serif', fontSize: '1.8rem' }}>{questionActuelle.text}</h2>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        {state.feedback ? (
+          <div style={{ gridColumn: '1 / -1', padding: '2rem', borderRadius: '12px', textAlign: 'center', background: state.feedback.estCorrecte ? '#C8E6C9' : '#FFCDD2', border: `2px solid ${state.feedback.estCorrecte ? '#4CAF50' : '#F44336'}` }}>
+            <h3 style={{ marginTop: 0, color: state.feedback.estCorrecte ? '#2E7D32' : '#C62828', fontSize: '1.5rem' }}>
+              {state.feedback.estCorrecte ? '✅ Bonne réponse!' : '❌ Mauvaise réponse!'}
+            </h3>
+            <p style={{ color: '#3E2723', marginBottom: '0.5rem' }}>
+              Votre réponse: <strong>{state.feedback.reponse}</strong>
+            </p>
+            {!state.feedback.estCorrecte && (
+              <p style={{ color: '#3E2723', marginTop: '0.5rem' }}>
+                Bonne réponse: <strong>{state.feedback.bonneReponse}</strong>
+              </p>
+            )}
+            <button 
+              onClick={handleNextQuestion}
+              style={{
+                marginTop: '1rem',
+                padding: '0.75rem 1.5rem',
+                background: '#7c6af7',
+                color: '#fff',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '1rem'
+              }}
+            >
+              Question suivante
+            </button>
+          </div>
+        ) : (
+          <>
+            {questionActuelle.options.map((option, i) => (
+              <button
+                key={i}
+                onClick={() => handleReponse(option)}
+                style={{
+                  padding: '1.2rem',
+                  background: '#FFF8E7',
+                  color: '#3E2723',
+                  border: '2px solid #A1887F',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '1rem',
+                  fontWeight: '500',
+                  transition: 'all 0.2s',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = '#8B5A2B'; e.currentTarget.style.color = '#FFF'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = '#FFF8E7'; e.currentTarget.style.color = '#3E2723'; }}
+              >
+                {option}
+              </button>
+            ))}
+          </>
+        )}
+      </div>
+    </main>
+  )
+}
+
+export default QuizEngine
